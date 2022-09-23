@@ -1,8 +1,38 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Q26_Wiggle_sort2 {
     public static void wiggleSort2(int[] nums) {
-        // write your code here
+       // 1. sort the array
+      Arrays.sort(nums);
+      
+      // 2. create extra array and manage equality
+      // using two pointers
+      // first will be i which point to 1 and second will be at end
+      // while i is less than than we fill res[i] = nums[j]
+      // and increase i by 2 and decrease j by 1
+      // when i is greater than n then make i as 0 and now start
+      // filling even indexes
+      int[] res = new int[nums.length];
+      int i = 1;
+      int j = res.length - 1;
+      while(i < nums.length){
+          res[i] = nums[j];
+          i += 2;
+          j--;
+      }
+      
+      i = 0;
+      while(i < nums.length){
+          res[i] = nums[j];
+          i += 2;
+          j--;
+      }
+      
+      // 3. again fill nums as res
+      for(int ii = 0; ii < nums.length; ii++){
+          nums[ii] = res[ii];
+      }
     }
 
     public static void main(String[] args) {
