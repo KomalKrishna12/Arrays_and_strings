@@ -1,43 +1,137 @@
 import java.util.*;
 public class Demo{
-    static int count = (int)1e9;
-    public static int partitionString(String s) {
-       //ArrayList<String> list = new ArrayList<>();
-        f(s, 0);
-        return count;
-    }
+    // static int count = (int)1e9;
+    // public static int partitionString(String s) {
+    //    //ArrayList<String> list = new ArrayList<>();
+    //     f(s, 0);
+    //     return count;
+    // }
     
-    public static void f(String s, int list){
-        if(s.length() == 0){
-            if(list < count){
-                count = list;
-            }
-            return;
-        }
-        for(int i = 0; i < s.length(); i++){
-            String str = s.substring(0, i+1);
-            String ros = s.substring(i+1);
-            if(valid(str)){
-                f(ros, list + 1);
-            }else{
-                break;
-            }
-        }
-    }
+    // public static void f(String s, int list){
+    //     if(s.length() == 0){
+    //         if(list < count){
+    //             count = list;
+    //         }
+    //         return;
+    //     }
+    //     for(int i = 0; i < s.length(); i++){
+    //         String str = s.substring(0, i+1);
+    //         String ros = s.substring(i+1);
+    //         if(valid(str)){
+    //             f(ros, list + 1);
+    //         }else{
+    //             break;
+    //         }
+    //     }
+    // }
     
-    public static boolean valid(String s){
-        if(s.length() == 1) return true;
-        HashSet<Character> set = new HashSet<>();
-        for(int i = 0; i < s.length(); i++){
-            char ch = s.charAt(i);
-            if(set.contains(ch)) return false;
-            set.add(ch);
+    // public static boolean valid(String s){
+    //     if(s.length() == 1) return true;
+    //     HashSet<Character> set = new HashSet<>();
+    //     for(int i = 0; i < s.length(); i++){
+    //         char ch = s.charAt(i);
+    //         if(set.contains(ch)) return false;
+    //         set.add(ch);
+    //     }
+    //     return true;
+    // }
+
+    // public static void main(String[] args) {
+    //     String s = "lvkmzlaeaxbprczpfarnlaptfvmutkfsatyywnxpmkpduwoqeeiltbdjipwihqi";
+    //     System.out.println(partitionString(s));
+    // }
+
+    static long minCost(long arr[], int n) 
+    {
+        // your code here
+        if(n == 1) return arr[0];
+        long cost = 0;
+        
+        List<Long> list = new ArrayList<>();
+        for(long val : arr) list.add(val);
+        while(list.size() > 1){
+            Collections.sort(list);
+            long val1 = list.get(0);
+            long val2 = list.get(1);
+            long sum = val1 + val2;
+            cost += sum;
+            list.remove(0);
+            list.remove(1);
+            list.add(sum);
+            
         }
-        return true;
+        
+        return cost;
+    
     }
 
     public static void main(String[] args) {
-        String s = "lvkmzlaeaxbprczpfarnlaptfvmutkfsatyywnxpmkpduwoqeeiltbdjipwihqi";
-        System.out.println(partitionString(s));
+        long[] arr = {4, 3, 2, 6};
+        System.out.println(minCost(arr, arr.length));;
+    }
+} 
+
+public String pushDominoes(String dominoes) {
+    char[] arr = new char[dominoes.length()+2];
+    char[] ans = new char[dominoes.length()];
+    for(int i = 0; i < dominoes.length(); i++){
+        ans[i] = dominoes.charAt(i);
+    }
+    arr[0] = 'L';
+    arr[arr.length-1] = 'R';
+    
+    int i = 1;
+    for(char ch : dominoes.toCharArray()){
+        arr[i++] = ch;
+    }
+     
+    int j = 0;
+    int k = 0;
+    
+    while(j < arr.length){
+        k = j+1;
+        
+        while(k < arr.length){
+            if(arr[k] == '.') {
+                k++;
+            }
+            else{
+               f(arr, j, k, ans);
+            }
+        }
+        
+        j = k;
+    }
+    
+    String res = "";
+    for(char ch : ans) res += ch;
+    return res;
+}
+
+public void f(char[] arr, int j, int k, char[] ans){
+    char ch1 = arr[j];
+    char ch2 = arr[k];
+    if(ch1 == ch2){
+        for(int i = j+1; i < k; i++) ans[i-1] = ch1;
+    }
+    else if(ch1 == 'L' && ch2 == 'R'){
+        return;
+    }
+    else if(ch1 == 'R' && ch2 == 'L'){
+        int size = k - j - 1;
+        int mid = (j+k)/2;
+        if(size % 2 == 0){
+            for(int i = j+1; i <= mid; i++){
+                ans[i-1] = ch1;
+            }
+        }
+        else{
+            for(int i = j+1; i < mid; i++){
+                ans[i-1] = ch1;
+            }
+            for(int i = mid+1; i < k; i++){
+                ans[i-1] = ch2;
+            }
+        }
     }
 }
